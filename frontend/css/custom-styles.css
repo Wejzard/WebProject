@@ -1,0 +1,49 @@
+/* Event Titles (Event 1, Event 2, Event 3) */
+.event-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #007bff;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+/* Event Image Styling */
+.event-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Event Names (Hiking, Cycling, Beach Volleyball) */
+.event-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+/* Button Style */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Ensure responsiveness */
+@media (max-width: 768px) {
+    .event-title {
+        font-size: 1.2rem;
+    }
+    .event-name {
+        font-size: 1rem;
+    }
+}
+
