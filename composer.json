@@ -1,0 +1,15 @@
+{   
+    "name": "vejz/web-project",
+    "autoload": {
+        "psr-4": {
+            "Vejz\\WebProject\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Wejzard",
+            "email": "vejzhajrudin@gmail.com"
+        }
+    ],
+    "require": {}
+}
