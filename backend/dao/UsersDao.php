@@ -21,14 +21,16 @@ class UsersDao extends BaseDao {
         return $this->query_unique('SELECT * FROM ' . $this->table_name . ' WHERE user_id=:id', ['id' => $id]);
      }
      
-     public function update_user_info($user_id, $nickname, $password_hash) {
-      
-      $query = "UPDATE users SET full_name = :nickname, password_hash = :password_hash WHERE user_id = :user_id";
-      $stmt = $this->connection->prepare($query);
-      $stmt->execute(['user_id' => $user_id, 'nickname' => $nickname, 'password_hash' => $password_hash]);
-  
-      return $stmt->rowCount();
-  }
+     public function update_user_info($user_id, $password) {
+        $query = "UPDATE users SET password = :password WHERE user_id = :user_id";
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute([
+            'user_id' => $user_id,
+            'password' => $password
+        ]);
+    
+        return $stmt->rowCount();
+    }
 
   
     public function update($entity, $id, $id_column = "user_id")
@@ -42,6 +44,13 @@ class UsersDao extends BaseDao {
     {
         $stmt = $this->connection->prepare("DELETE FROM " . $this->table_name . " WHERE user_id = :user_id");
         $stmt->bindValue(':user_id', $id); 
+        $stmt->execute();
+    }
+
+    public function get_user_by_email($email) {
+        $stmt = $this->connection->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
 
