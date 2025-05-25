@@ -1,6 +1,6 @@
 <?php
 require_once 'BaseService.php';
-require_once __DIR__ . "../dao/EventsDao.php";
+require_once __DIR__ . "/../dao/EventsDao.php";
 
 class EventsService extends BaseService
 {
@@ -13,7 +13,7 @@ class EventsService extends BaseService
         return $this->dao->get_by_category($category);
     }
     public function add_event($data) {
-        // Basic validations
+        
         if (strlen(trim($data['title'] ?? '')) < 3) {
             Flight::halt(400, json_encode(['error' => 'Title is too short.']));
         }

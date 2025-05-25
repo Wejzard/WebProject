@@ -1,19 +1,12 @@
 <?php
 require_once 'BaseService.php';
-require_once __DIR__ . "../dao/OrdersDao.php";
+require_once __DIR__ . "/../dao/OrdersDao.php";
 
 class OrdersService extends BaseService
 {
     public function __construct()
     {
         parent::__construct(new OrdersDao());
-    }
-
-    private function ensure_admin($role)
-    {
-        if ($role !== 'admin') {
-            Flight::halt(403, json_encode(["error" => "Access denied. Admins only."]));
-        }
     }
 
     
@@ -27,21 +20,21 @@ class OrdersService extends BaseService
     }
 
     // Admin-only methods
-    public function admin_get_all($role)
+    public function admin_get_all()
     {
-        $this->ensure_admin($role);
+        
         return $this->dao->get_all();
     }
 
-    public function admin_update($data, $id, $role)
+    public function admin_update($data, $id)
     {
-        $this->ensure_admin($role);
+      
         return $this->dao->update($data, $id);
     }
 
-    public function admin_delete($id, $role)
+    public function admin_delete($id)
     {
-        $this->ensure_admin($role);
+       
         return $this->dao->delete($id);
     }
 

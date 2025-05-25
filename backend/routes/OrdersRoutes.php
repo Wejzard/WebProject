@@ -6,6 +6,7 @@ $ordersService = new OrdersService();
  * @OA\Post(
  *     path="/orders",
  *     summary="Place an order",
+ *     security={{"JWT":{}}},
  *     operationId="placeOrder",
  *     tags={"Orders"},
  *     @OA\RequestBody(
@@ -29,6 +30,7 @@ $ordersService = new OrdersService();
  */
 //USER: Place an order
 Flight::route('POST /orders', function () use ($ordersService) {
+     Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     $data = Flight::request()->data->getData();
     Flight::json([
         'message' => 'Order placed successfully.',
@@ -38,16 +40,10 @@ Flight::route('POST /orders', function () use ($ordersService) {
 /**
  * @OA\Get(
  *     path="/orders",
- *     summary="Get all orders (Admin)",
+ *     summary="Get all orders (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="getAllOrdersAdmin",
  *     tags={"Orders"},
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user (Admin)",
- *         @OA\Schema(type="string", example="admin")
- *     ),
  *     @OA\Response(
  *         response=200,
  *         description="List of all orders",
@@ -67,13 +63,14 @@ Flight::route('POST /orders', function () use ($ordersService) {
  */
 // ADMIN: Get all orders
 Flight::route('GET /orders', function () use ($ordersService) {
-    $role = Flight::request()->query['role'];
-    Flight::json($ordersService->admin_get_all($role));
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
+    Flight::json($ordersService->admin_get_all());
 });
 /**
  * @OA\Put(
  *     path="/orders/{id}",
- *     summary="Update an existing order by ID (Admin)",
+ *     summary="Update an existing order by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="updateOrderAdmin",
  *     tags={"Orders"},
  *     @OA\Parameter(
@@ -82,13 +79,6 @@ Flight::route('GET /orders', function () use ($ordersService) {
  *         required=true,
  *         description="Order ID",
  *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user (Admin)",
- *         @OA\Schema(type="string", example="admin")
  *     ),
  *     @OA\RequestBody(
  *         required=true,
@@ -110,17 +100,18 @@ Flight::route('GET /orders', function () use ($ordersService) {
  */
 // ADMIN: Update an order
 Flight::route('PUT /orders/@id', function ($id) use ($ordersService) {
-    $role = Flight::request()->query['role'];
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     Flight::json([
         'message' => 'Order updated successfully.',
-        'data' => $ordersService->admin_update($data, $id, $role)
+        'data' => $ordersService->admin_update($data, $id)
     ]);
 });
 /**
  * @OA\Delete(
  *     path="/orders/{id}",
- *     summary="Delete an order by ID (Admin)",
+ *     summary="Delete an order by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="deleteOrderAdmin",
  *     tags={"Orders"},
  *     @OA\Parameter(
@@ -129,13 +120,6 @@ Flight::route('PUT /orders/@id', function ($id) use ($ordersService) {
  *         required=true,
  *         description="Order ID",
  *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user (Admin)",
- *         @OA\Schema(type="string", example="admin")
  *     ),
  *     @OA\Response(
  *         response=200,
@@ -149,16 +133,17 @@ Flight::route('PUT /orders/@id', function ($id) use ($ordersService) {
  */
 // ADMIN: Delete an order
 Flight::route('DELETE /orders/@id', function ($id) use ($ordersService) {
-    $role = Flight::request()->query['role'];
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     Flight::json([
         'message' => 'Order deleted successfully.',
-        'data' => $ordersService->admin_delete($id, $role)
+        'data' => $ordersService->admin_delete($id)
     ]);
 });
 /**
  * @OA\Get(
  *     path="/orders/{id}",
- *     summary="Get an order by ID",
+ *     summary="Get an order by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="getOrderById",
  *     tags={"Orders"},
  *     @OA\Parameter(
@@ -184,7 +169,8 @@ Flight::route('DELETE /orders/@id', function ($id) use ($ordersService) {
  *     )
  * )
  */
-// EVERYONE: Get single order by ID
+// ADMIN: Get single order by ID
 Flight::route('GET /orders/@id', function ($id) use ($ordersService) {
+   Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     Flight::json($ordersService->get_by_id($id));
 });

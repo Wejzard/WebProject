@@ -4,15 +4,9 @@ require_once __DIR__ . '/../services/PaymentsService.php';
  * @OA\Get(
  *     path="/payments",
  *     summary="Get all payments",
+ *     security={{"JWT":{}}},
  *     operationId="getAllPayments",
  *     tags={"Payments"},
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
- *     ),
  *     @OA\Response(
  *         response=200,
  *         description="List of all payments",
@@ -29,15 +23,17 @@ require_once __DIR__ . '/../services/PaymentsService.php';
  * )
  */
 Flight::route('GET /payments', function () {
-    $role = Flight::request()->query['role'];
+        Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
+
     $service = new PaymentsService();
 
-    Flight::json($service->fetch_all_payments($role));
+    Flight::json($service->fetch_all_payments());
 });
 /**
  * @OA\Get(
  *     path="/payments/{id}",
  *     summary="Get payment by ID",
+ *     security={{"JWT":{}}},
  *     operationId="getPaymentById",
  *     tags={"Payments"},
  *     @OA\Parameter(
@@ -46,13 +42,6 @@ Flight::route('GET /payments', function () {
  *         required=true,
  *         description="ID of the payment to retrieve",
  *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
  *     ),
  *     @OA\Response(
  *         response=200,
@@ -70,24 +59,18 @@ Flight::route('GET /payments', function () {
  * )
  */
 Flight::route('GET /payments/@id', function ($id) {
-    $role = Flight::request()->query['role'];
+        Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     $service = new PaymentsService();
 
-    Flight::json($service->fetch_payment_by_id($id, $role));
+    Flight::json($service->fetch_payment_by_id($id));
 });
 /**
  * @OA\Post(
  *     path="/payments",
  *     summary="Create a new payment",
+ *     security={{"JWT":{}}},
  *     operationId="createPayment",
  *     tags={"Payments"},
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
- *     ),
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
@@ -107,19 +90,20 @@ Flight::route('GET /payments/@id', function ($id) {
  * )
  */
 Flight::route('POST /payments', function () {
+         Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     $data = Flight::request()->data->getData();
-    $role = Flight::request()->query['role'];
     $service = new PaymentsService();
 
     Flight::json([
         'message' => 'Payment created successfully',
-        'data' => $service->create_payment($data, $role)
+        'data' => $service->create_payment($data)
     ]);
 });
 /**
  * @OA\Put(
  *     path="/payments/{id}",
- *     summary="Update an existing payment by ID",
+ *     summary="Update an existing payment by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="updatePayment",
  *     tags={"Payments"},
  *     @OA\Parameter(
@@ -128,13 +112,6 @@ Flight::route('POST /payments', function () {
  *         required=true,
  *         description="Payment ID",
  *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
  *     ),
  *     @OA\RequestBody(
  *         required=true,
@@ -155,19 +132,20 @@ Flight::route('POST /payments', function () {
  * )
  */
 Flight::route('PUT /payments/@id', function ($id) {
+     Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $data = Flight::request()->data->getData();
-    $role = Flight::request()->query['role'];
     $service = new PaymentsService();
 
     Flight::json([
         'message' => 'Payment updated successfully',
-        'data' => $service->modify_payment($data, $id, $role)
+        'data' => $service->modify_payment($data, $id)
     ]);
 });
 /**
  * @OA\Delete(
  *     path="/payments/{id}",
- *     summary="Delete a payment by ID",
+ *     summary="Delete a payment by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="deletePayment",
  *     tags={"Payments"},
  *     @OA\Parameter(
@@ -176,13 +154,6 @@ Flight::route('PUT /payments/@id', function ($id) {
  *         required=true,
  *         description="Payment ID",
  *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
  *     ),
  *     @OA\Response(
  *         response=200,
@@ -195,11 +166,11 @@ Flight::route('PUT /payments/@id', function ($id) {
  * )
  */
 Flight::route('DELETE /payments/@id', function ($id) {
-    $role = Flight::request()->query['role'];
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $service = new PaymentsService();
 
     Flight::json([
         'message' => 'Payment deleted successfully',
-        'data' => $service->remove_payment($id, $role)
+        'data' => $service->remove_payment($id)
     ]);
 });

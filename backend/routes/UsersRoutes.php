@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../services/UsersService.php';
+
 /**
  * @OA\Post(
  *     path="/register",
@@ -26,14 +27,19 @@ require_once __DIR__ . '/../services/UsersService.php';
  * )
  */
 Flight::route('POST /register', function () {
-    $data = Flight::request()->data->getData();
-    $service = new UsersService();
+    try {
+        $data = Flight::request()->data->getData();
+        $service = new UsersService();
 
-    Flight::json([
-        'message' => 'User registered successfully',
-        'data' => $service->register($data)
-    ]);
+        Flight::json([
+            'message' => 'User registered successfully',
+            'data' => $service->register($data)
+        ]);
+    } catch (Exception $e) {
+        Flight::halt(500, "Exception: " . $e->getMessage());
+    }
 });
+
 /**
  * @OA\Post(
  *     path="/login",
@@ -63,10 +69,12 @@ Flight::route('POST /login', function () {
 
     Flight::json($service->login($data));
 });
+
 /**
  * @OA\Post(
  *     path="/change-password",
  *     summary="Change user password",
+ *     security={{"JWT":{}}},
  *     operationId="changeUserPassword",
  *     tags={"User"},
  *     @OA\RequestBody(
@@ -97,10 +105,12 @@ Flight::route('POST /change-password', function () {
         'data' => $service->change_password($data)
     ]);
 });
+
 /**
  * @OA\Get(
  *     path="/users",
- *     summary="Get all users",
+ *     summary="Get all users (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="getAllUsers",
  *     tags={"User"},
  *     @OA\Response(
@@ -109,7 +119,6 @@ Flight::route('POST /change-password', function () {
  *         @OA\JsonContent(
  *             type="array",
  *             @OA\Items(
- *                 type="object",
  *                 @OA\Property(property="id", type="integer", example=1),
  *                 @OA\Property(property="username", type="string", example="user123"),
  *                 @OA\Property(property="email", type="string", example="user@example.com")
@@ -119,13 +128,16 @@ Flight::route('POST /change-password', function () {
  * )
  */
 Flight::route('GET /users', function () {
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $service = new UsersService();
     Flight::json($service->get_all());
 });
+
 /**
  * @OA\Get(
  *     path="/users/{id}",
- *     summary="Get user by ID",
+ *     summary="Get user by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="getUserById",
  *     tags={"User"},
  *     @OA\Parameter(
@@ -150,15 +162,17 @@ Flight::route('GET /users', function () {
  *     )
  * )
  */
-// Get user by ID
 Flight::route('GET /users/@id', function ($id) {
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $service = new UsersService();
     Flight::json($service->get_by_id($id));
 });
+
 /**
  * @OA\Put(
  *     path="/users/{id}",
- *     summary="Update an existing user by ID",
+ *     summary="Update an existing user by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="updateUser",
  *     tags={"User"},
  *     @OA\Parameter(
@@ -187,6 +201,7 @@ Flight::route('GET /users/@id', function ($id) {
  * )
  */
 Flight::route('PUT /users/@id', function ($id) {
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     $service = new UsersService();
 
@@ -195,10 +210,12 @@ Flight::route('PUT /users/@id', function ($id) {
         'data' => $service->update($data, $id, 'user_id')
     ]);
 });
+
 /**
  * @OA\Delete(
  *     path="/users/{id}",
- *     summary="Delete a user by ID",
+ *     summary="Delete a user by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="deleteUser",
  *     tags={"User"},
  *     @OA\Parameter(
@@ -218,12 +235,10 @@ Flight::route('PUT /users/@id', function ($id) {
  * )
  */
 Flight::route('DELETE /users/@id', function ($id) {
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $service = new UsersService();
     $service->delete($id);
     Flight::json(['message' => "User deleted successfully."]);
 });
-
-
-
 
 

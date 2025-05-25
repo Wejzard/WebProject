@@ -30,7 +30,7 @@ class UsersDao extends BaseDao {
         ]);
     
         return $stmt->rowCount();
-    }
+    } 
 
   
     public function update($entity, $id, $id_column = "user_id")

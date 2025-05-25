@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<!-- Page Heading -->
+  <h1 class="h3 mb-4 text-gray-800">ADMIN ACCESS!</h1>
+
+  <hr>
+
+<body>
+  <div class="container mt-4">
+    <h2 class="text-center mb-4">Admin Dashboard</h2>
+
+    <div class="d-flex justify-content-end mb-3">
+      <a href="../../index.html" class="btn btn-secondary">Back to Main Page</a>
+    </div>
+
+    <ul class="nav nav-tabs" id="adminTabs">
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#users">Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#events">Events</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#orders">Orders</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#tickets">Tickets</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#payments">Payments</a>
+      </li>
+    </ul>
+
+    <div class="tab-content mt-4">
+      <div class="tab-pane fade show active" id="users">
+        <h4>Users</h4>
+        <div class="mb-3">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        </div>
+        <pre id="usersJsonOutput" class="bg-light p-3 border rounded"></pre>
+      </div>
+
+      <div class="tab-pane fade" id="events">
+        <h4>Events</h4>
+        <div class="mb-3">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        </div>
+        <pre id="eventsJsonOutput" class="bg-light p-3 border rounded"></pre>
+      </div>
+
+      <div class="tab-pane fade" id="orders">
+        <h4>Orders</h4>
+        <div class="mb-3">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        </div>
+        <pre id="ordersJsonOutput" class="bg-light p-3 border rounded"></pre>
+      </div>
+
+      <div class="tab-pane fade" id="tickets">
+        <h4>Tickets</h4>
+        <div class="mb-3">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        </div>
+        <pre id="ticketsJsonOutput" class="bg-light p-3 border rounded"></pre>
+      </div>
+
+      <div class="tab-pane fade" id="payments">
+        <h4>Payments</h4>
+        <div class="mb-3">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+          <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+        </div>
+        <pre id="paymentsJsonOutput" class="bg-light p-3 border rounded"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createModalLabel">Create Entry</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="createForm">
+            <div id="createFormInputs"></div>
+            <button type="submit" class="btn btn-success mt-3">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateModalLabel">Update Entry</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="updateForm">
+            <div id="updateFormInputs"></div>
+            <button type="submit" class="btn btn-warning mt-3">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this entry?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="users-table-body"></tbody>
+</table>
+
+  <!-- External JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Custom Scripts -->
+  <script src="../utils/constants.js"></script>
+  <script src="../utils/rest-client.js"></script>
+  <script src="../utils/utils.js"></script>
+  <script src="../services/admin-dashboard.js"></script>
+</body>
+
+</html>
