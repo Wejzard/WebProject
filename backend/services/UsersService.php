@@ -12,6 +12,7 @@ class UsersService extends BaseService
     public function register($data)
 {
     
+    
     $firstName = trim($data['first_name'] ?? '');
     $lastName = trim($data['last_name'] ?? '');
     $email = trim($data['email'] ?? '');
@@ -30,6 +31,9 @@ class UsersService extends BaseService
     if ($password !== $repeatPassword) {
         Flight::halt(400, json_encode(["error" => "Passwords do not match."]));
     }
+
+    // Remove repeat_password before inserting
+    unset($data['repeat_password']);
 
     if (strlen($password) < 6) {
         Flight::halt(400, json_encode(["error" => "Password must be at least 6 characters."]));

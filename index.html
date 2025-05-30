@@ -161,6 +161,12 @@
                             </div>
                         </div>
                     </form>
+                    <!-- Admin Button (Only for Admins) -->
+<div id="adminTopbarButton" class="ml-3 d-none">
+  <a href="frontend/views/admin-dashboard.html" class="btn btn-danger btn-sm">
+    <i class="fas fa-tools mr-1"></i> Admin Panel
+  </a>
+</div>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -182,20 +188,26 @@
                                 <img class="img-profile rounded-circle"
                                 src="frontend/assets/img/undraw_profile.svg">
                             </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                
-                                <a class="dropdown-item" href="#settings">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
+                           <!-- Dropdown - User Information -->
+<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+     aria-labelledby="userDropdown">
+
+
+  <!-- Settings -->
+  <a class="dropdown-item" href="#settings">
+    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+    Settings
+  </a>
+
+  <div class="dropdown-divider"></div>
+
+  <!-- Logout -->
+  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+    Logout
+  </a>
+
+</div>
                         </li>
 
                     </ul>
@@ -219,6 +231,7 @@
        <section id="settings" data-load = "settings.html">   </section>
        <section id="login" data-load = "login.html">   </section>  
        <section id="register" data-load = "register.html">   </section>
+
        
         <!--  </div>   -->
     </main>  
@@ -286,6 +299,7 @@
 <!--<script src="frontend/"></script>-->
 <!-- Dupli load jquerya-->
 <!-- <script src="frontend/js/jquery.min.js"></script> -->
+ <script src="frontend/js/utils.js"></script>
 <script>
     
     var app = $.spapp({
@@ -296,6 +310,9 @@
     
     app.run();
 </script>
+
+
+
 
 </body>
 

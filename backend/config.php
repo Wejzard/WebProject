@@ -27,4 +27,9 @@ class Config
     {
         return '127.0.0.1';
     }
+    // JWT Secret Key Definition 
+    public static function JWT_SECRET() {
+       return 'fb2f8b1e3e4c1f7d623dbc1a4f34c1d5acaf543b828ed7d8191d1e55a02eb636';
+   }
+
 }

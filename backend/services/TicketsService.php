@@ -1,6 +1,6 @@
 <?php
 require_once 'BaseService.php';
-require_once __DIR__ . "../dao/TicketsDao.php";
+require_once __DIR__ . "/../dao/TicketsDao.php";
 
 class TicketsService extends BaseService
 {
@@ -9,40 +9,34 @@ class TicketsService extends BaseService
         parent::__construct(new TicketsDao());
     }
 
-    private function ensure_admin($role)
-    {
-        if ($role !== 'admin') {
-            Flight::halt(403, json_encode(["error" => "Access denied. Admins only."]));
-        }
-    }
 
-    public function fetch_all_tickets($role)
+    public function fetch_all_tickets()
     {
-        $this->ensure_admin($role);
+       
         return $this->dao->get_all();
     }
 
-    public function fetch_ticket_by_id($id, $role)
+    public function fetch_ticket_by_id($id, )
     {
-        $this->ensure_admin($role);
+    
         return $this->dao->get_by_id($id);
     }
 
-    public function create_ticket($data, $role)
+    public function create_ticket($data)
     {
-        $this->ensure_admin($role);
+       
         return $this->dao->add($data);
     }
 
-    public function modify_ticket($data, $id, $role)
+    public function modify_ticket($data, $id)
     {
-        $this->ensure_admin($role);
+ 
         return $this->dao->update($data, $id);
     }
 
-    public function remove_ticket($id, $role)
+    public function remove_ticket($id, )
     {
-        $this->ensure_admin($role);
+    
         return $this->dao->delete($id);
     }
 }

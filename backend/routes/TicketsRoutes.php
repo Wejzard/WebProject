@@ -3,16 +3,10 @@ require_once __DIR__ . '/../services/TicketsService.php';
 /**
  * @OA\Get(
  *     path="/tickets",
- *     summary="Get all tickets",
+ *     summary="Get all tickets (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="getAllTickets",
  *     tags={"Tickets"},
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
- *     ),
  *     @OA\Response(
  *         response=200,
  *         description="List of all tickets",
@@ -29,15 +23,16 @@ require_once __DIR__ . '/../services/TicketsService.php';
  * )
  */
 Flight::route('GET /tickets', function () {
-    $role = Flight::request()->query['role']; // For now, role passed via query (can be header/token in production)
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $service = new TicketsService();
 
-    Flight::json($service->fetch_all_tickets($role));
+    Flight::json($service->fetch_all_tickets());
 });
 /**
  * @OA\Get(
  *     path="/tickets/{id}",
- *     summary="Get ticket by ID",
+ *     summary="Get ticket by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="getTicketById",
  *     tags={"Tickets"},
  *     @OA\Parameter(
@@ -46,13 +41,6 @@ Flight::route('GET /tickets', function () {
  *         required=true,
  *         description="ID of the ticket to retrieve",
  *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
  *     ),
  *     @OA\Response(
  *         response=200,
@@ -70,24 +58,18 @@ Flight::route('GET /tickets', function () {
  * )
  */
 Flight::route('GET /tickets/@id', function ($id) {
-    $role = Flight::request()->query['role'];
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $service = new TicketsService();
 
-    Flight::json($service->fetch_ticket_by_id($id, $role));
+    Flight::json($service->fetch_ticket_by_id($id));
 });
 /**
  * @OA\Post(
  *     path="/tickets",
- *     summary="Create a new ticket",
+ *     summary="Create a new ticket (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="createTicket",
  *     tags={"Tickets"},
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
- *     ),
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
@@ -107,19 +89,20 @@ Flight::route('GET /tickets/@id', function ($id) {
  * )
  */
 Flight::route('POST /tickets', function () {
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $data = Flight::request()->data->getData();
-    $role = Flight::request()->query['role'];
     $service = new TicketsService();
 
     Flight::json([
         'message' => 'Ticket created successfully',
-        'data' => $service->create_ticket($data, $role)
+        'data' => $service->create_ticket($data)
     ]);
 });
 /**
  * @OA\Put(
  *     path="/tickets/{id}",
- *     summary="Update an existing ticket by ID",
+ *     summary="Update an existing ticket by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="updateTicket",
  *     tags={"Tickets"},
  *     @OA\Parameter(
@@ -128,13 +111,6 @@ Flight::route('POST /tickets', function () {
  *         required=true,
  *         description="Ticket ID",
  *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
  *     ),
  *     @OA\RequestBody(
  *         required=true,
@@ -155,19 +131,20 @@ Flight::route('POST /tickets', function () {
  * )
  */
 Flight::route('PUT /tickets/@id', function ($id) {
+     Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $data = Flight::request()->data->getData();
-    $role = Flight::request()->query['role'];
     $service = new TicketsService();
 
     Flight::json([
         'message' => 'Ticket updated successfully',
-        'data' => $service->modify_ticket($data, $id, $role)
+        'data' => $service->modify_ticket($data, $id)
     ]);
 });
 /**
  * @OA\Delete(
  *     path="/tickets/{id}",
- *     summary="Delete a ticket by ID",
+ *     summary="Delete a ticket by ID (Admin only)",
+ *     security={{"JWT":{}}},
  *     operationId="deleteTicket",
  *     tags={"Tickets"},
  *     @OA\Parameter(
@@ -176,13 +153,6 @@ Flight::route('PUT /tickets/@id', function ($id) {
  *         required=true,
  *         description="Ticket ID",
  *         @OA\Schema(type="integer", example=1)
- *     ),
- *     @OA\Parameter(
- *         name="role",
- *         in="query",
- *         required=true,
- *         description="Role of the user, passed via query",
- *         @OA\Schema(type="string", example="admin")
  *     ),
  *     @OA\Response(
  *         response=200,
@@ -195,11 +165,11 @@ Flight::route('PUT /tickets/@id', function ($id) {
  * )
  */
 Flight::route('DELETE /tickets/@id', function ($id) {
-    $role = Flight::request()->query['role'];
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $service = new TicketsService();
 
     Flight::json([
         'message' => 'Ticket deleted successfully',
-        'data' => $service->remove_ticket($id, $role)
+        'data' => $service->remove_ticket($id)
     ]);
 });

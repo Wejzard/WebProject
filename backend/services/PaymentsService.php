@@ -1,6 +1,6 @@
 <?php
 require_once 'BaseService.php';
-require_once __DIR__ . "../dao/PaymentsDao.php";
+require_once __DIR__ . "/../dao/PaymentsDao.php";
 
 class PaymentsService extends BaseService
 {
@@ -9,40 +9,34 @@ class PaymentsService extends BaseService
         parent::__construct(new PaymentsDao());
     }
 
-    private function ensure_admin($role)
-    {
-        if ($role !== 'admin') {
-            Flight::halt(403, json_encode(["error" => "Access denied. Admins only."]));
-        }
-    }
 
-    public function fetch_all_payments($role)
+    public function fetch_all_payments()
     {
-        $this->ensure_admin($role);
+
         return $this->dao->get_all();
     }
 
-    public function fetch_payment_by_id($id, $role)
+    public function fetch_payment_by_id($id)
     {
-        $this->ensure_admin($role);
+      
         return $this->dao->get_by_id($id);
     }
 
-    public function create_payment($data, $role)
+    public function create_payment($data)
     {
-        $this->ensure_admin($role);
+    
         return $this->dao->add($data);
     }
 
-    public function modify_payment($data, $id, $role)
+    public function modify_payment($data, $id)
     {
-        $this->ensure_admin($role);
+      
         return $this->dao->update($data, $id);
     }
 
-    public function remove_payment($id, $role)
+    public function remove_payment($id)
     {
-        $this->ensure_admin($role);
+       
         return $this->dao->delete($id);
     }
 }

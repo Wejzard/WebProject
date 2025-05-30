@@ -5,6 +5,7 @@ require_once __DIR__ . '/../services/EventsService.php';
  * @OA\Get(
  *     path="/events/category/{category}",
  *     summary="Get events by category",
+ *     security={{"JWT":{}}},
  *     operationId="getEventsByCategory",
  *     tags={"Events"},
  *     @OA\Parameter(
@@ -31,12 +32,14 @@ require_once __DIR__ . '/../services/EventsService.php';
  * )
  */
 Flight::route('GET /events/category/@category', function($category) {
+         Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::events_service()->get_by_category($category));
 });
 /**
  * @OA\Get(
  *     path="/events/search/{name}",
  *     summary="Search events by name",
+ *     security={{"JWT":{}}},
  *     operationId="searchEventsByName",
  *     tags={"Events"},
  *     @OA\Parameter(
@@ -63,6 +66,7 @@ Flight::route('GET /events/category/@category', function($category) {
  * )
  */
 Flight::route('GET /events/search/@name', function($name) {
+         Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::USER]);
     Flight::json(Flight::events_service()->search_by_name($name));
 });
 
@@ -71,6 +75,7 @@ Flight::route('GET /events/search/@name', function($name) {
  * @OA\Post(
  *     path="/events",
  *     summary="Create a new event",
+ *     security={{"JWT":{}}},
  *     operationId="createEvent",
  *     tags={"Events"},
  *     @OA\RequestBody(
@@ -93,6 +98,7 @@ Flight::route('GET /events/search/@name', function($name) {
  * )
  */
 Flight::route('POST /events', function () {
+      Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
     $data = Flight::request()->data->getData();
     $service = new EventsService();
 
@@ -105,6 +111,7 @@ Flight::route('POST /events', function () {
  * @OA\Put(
  *     path="/events/{id}",
  *     summary="Update an existing event by ID",
+ *     security={{"JWT":{}}},
  *     operationId="updateEvent",
  *     tags={"Events"},
  *     @OA\Parameter(
@@ -141,12 +148,10 @@ Flight::route('POST /events', function () {
  * )
  */
 Flight::route('PUT /events/@id', function($id) {
-    $data = Flight::request()->data->getData();
-
-    if (($data['role'] ?? '') !== 'admin') {
-        Flight::halt(403, json_encode(['error' => 'Unauthorized: Admins only']));
-    }
-
+   
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
+   
+     $data = Flight::request()->data->getData();
     $service = new EventsService();
     Flight::json([
         'message' => 'Event updated successfully',
@@ -158,6 +163,7 @@ Flight::route('PUT /events/@id', function($id) {
  * @OA\Delete(
  *     path="/events/{id}",
  *     summary="Delete an event by ID",
+ *     security={{"JWT":{}}},
  *     operationId="deleteEvent",
  *     tags={"Events"},
  *     @OA\Parameter(
@@ -185,11 +191,9 @@ Flight::route('PUT /events/@id', function($id) {
  * )
  */
 Flight::route('DELETE /events/@id', function($id) {
-    $data = Flight::request()->data->getData();
 
-    if (($data['role'] ?? '') !== 'admin') {
-        Flight::halt(403, json_encode(['error' => 'Unauthorized: Admins only']));
-    }
+    Flight::auth_middleware()->authorizeRoles(Roles::ADMIN);
+    $data = Flight::request()->data->getData();
 
     $service = new EventsService();
     $service->delete($id);
