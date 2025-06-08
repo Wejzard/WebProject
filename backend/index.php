@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/data/Roles.php';
 require_once __DIR__ . '/services/AuthService.php';
 require_once __DIR__ . '/services/UsersService.php';
 require_once __DIR__ . '/services/EventsService.php';
@@ -16,7 +17,7 @@ use Firebase\JWT\Key;
 
 Flight::register('auth_service', 'AuthService');
 Flight::register('user_service', 'UsersService');
-Flight::register('event_service', 'EventsService');
+Flight::register('events_service', 'EventsService');
 Flight::register('ticket_service', 'TicketsService');
 Flight::register('payment_service', 'PaymentsService');
 Flight::register('order_service', 'OrdersService');
@@ -40,6 +41,7 @@ Flight::route('/*', function () {
         }
     }
 });
+
 
 
 require_once __DIR__ . '/routes/AuthRoutes.php';

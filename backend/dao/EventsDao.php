@@ -24,24 +24,12 @@ class EventsDao extends BaseDao {
         return $this->query_unique("SELECT * FROM {$this->table_name} WHERE event_id = :id", ['id' => $id]);
     }
 
-    public function get_by_category($page = 1, $limit = 4, $category = null) {
-        $offset = ($page - 1) * $limit;
-        $query = "SELECT * FROM {$this->table_name}";
-        if ($category !== null) {
-            $query .= " WHERE category = :category";
-        }
-        $query .= " LIMIT :limit OFFSET :offset";
-
-        $stmt = $this->connection->prepare($query);
-        if ($category !== null) {
-            $stmt->bindParam(':category', $category, PDO::PARAM_STR);
-        }
-        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    public function get_by_category($category) {
+    $stmt = $this->connection->prepare("SELECT * FROM {$this->table_name} WHERE category = :category");
+    $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
     public function search_by_name($name) {
         $stmt = $this->connection->prepare("SELECT * FROM {$this->table_name} WHERE title LIKE :name");

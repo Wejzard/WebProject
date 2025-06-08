@@ -9,10 +9,10 @@ $(document).ready(function () {
       password: $("#password").val(),
       repeat_password: $("#repeatPassword").val()
     };
-
+    
     RestClient.post("/auth/register", data, function () {
       toastr.success("Registration successful!");
-      window.location.href = "login.html";
+      window.location.href = "/ticket/#login";
     }, function (error) {
       toastr.error(error.responseJSON?.message || "Registration failed.");
     });

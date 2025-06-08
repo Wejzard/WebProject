@@ -12,7 +12,7 @@ let UserService = {
       if (user.role === "admin") {
         window.location.href = "admin-dashboard.html";
       } else {
-        window.location.href = "../../index.html";
+        window.location.href = "/ticket/#main";
       }
 
     }, function (xhr) {
