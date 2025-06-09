@@ -1,74 +1,8 @@
 <?php
 require_once __DIR__ . '/../services/UsersService.php';
 
-/**
- * @OA\Post(
- *     path="/register",
- *     summary="Register a new user",
- *     operationId="registerUser",
- *     tags={"User"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"username", "email", "password"},
- *             @OA\Property(property="username", type="string", example="user123"),
- *             @OA\Property(property="email", type="string", example="user@example.com"),
- *             @OA\Property(property="password", type="string", example="password123")
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="User registered successfully",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="User registered successfully"),
- *             @OA\Property(property="data", type="object", example={"id": 1, "username": "user123"})
- *         )
- *     )
- * )
- */
-Flight::route('POST /register', function () {
-    try {
-        $data = Flight::request()->data->getData();
-        $service = new UsersService();
 
-        Flight::json([
-            'message' => 'User registered successfully',
-            'data' => $service->register($data)
-        ]);
-    } catch (Exception $e) {
-        Flight::halt(500, "Exception: " . $e->getMessage());
-    }
-});
 
-/**
- * @OA\Post(
- *     path="/login",
- *     summary="Login an existing user",
- *     operationId="loginUser",
- *     tags={"User"},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"email", "password"},
- *             @OA\Property(property="email", type="string", example="user@example.com"),
- *             @OA\Property(property="password", type="string", example="password123")
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Login successful",
- *         @OA\JsonContent(
- *             @OA\Property(property="token", type="string", example="jwt_token_example")
- *         )
- *     )
- * )
- */
-Flight::route('POST /login', function () {
-    $data = Flight::request()->data->getData();
-    $service = new UsersService();
-
-    Flight::json($service->login($data));
-});
 
 /**
  * @OA\Post(

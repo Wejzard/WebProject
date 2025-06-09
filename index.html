@@ -78,27 +78,27 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item active" href="#main">ALL</a>
                         
                         <h6 class="collapse-header">Music Genres:</h6>
-                        <a class="collapse-item active" href="#404">POP</a>
-                        <a class="collapse-item active" href="#404">Rock</a>
-                        <a class="collapse-item active" href="#404">Opera</a>
+                       <a class="collapse-item" href="#main" onclick="EventService.loadAll('POP')">POP</a>
+                        <a class="collapse-item" href="#main" onclick="EventService.loadAll('Rock')">Rock</a>
+                        <a class="collapse-item" href="#main" onclick="EventService.loadAll('Opera')">Opera</a>
                         
 
                         <div class="collapse-divider"></div>
 
                         <h6 class="collapse-header">Art Categories:</h6>
-                        <a class="collapse-item active" href="#404">Theatre</a>
-                        <a class="collapse-item active" href="#404">Paintings</a>
-                        <a class="collapse-item active" href="#404">Sculpturing</a>
+                    <a class="collapse-item" href="#main" onclick="EventService.loadAll('Theatre')">Theatre</a>
+                    <a class="collapse-item" href="#main" onclick="EventService.loadAll('Paintings')">Paintings</a>
+                    <a class="collapse-item" href="#main" onclick="EventService.loadAll('Sculpturing')">Sculpturing</a>
+
 
                         <div class="collapse-divider"></div>
 
-                        <h6 class="collapse-header">Sports:</h6>
-                        <a class="collapse-item active" href="#404">Football</a>
-                        <a class="collapse-item active" href="#404">Basketball</a>
-                        <a class="collapse-item active" href="#404">Baseball</a>
+                         <h6 class="collapse-header">Sports:</h6>
+                      <a class="collapse-item" href="#main" onclick="EventService.loadAll('Football')">Football</a>
+                      <a class="collapse-item" href="#main" onclick="EventService.loadAll('Basketball')">Basketball</a>
+                      <a class="collapse-item" href="#main" onclick="EventService.loadAll('Baseball')">Baseball</a>
                         <div class="collapse-divider"></div>
 
                        
@@ -229,8 +229,8 @@
        <section id="event" data-load = "event.html">   </section>  
        <section id="profile" data-load = "profile.html">  </section>  
        <section id="settings" data-load = "settings.html">   </section>
-       <section id="login" data-load = "login.html">   </section>  
-       <section id="register" data-load = "register.html">   </section>
+      <section id="login" data-load = "login.html">   </section>  
+       <section id="register" data-load = "register.html">   </section>  
 
        
         <!--  </div>   -->
@@ -299,7 +299,7 @@
 <!--<script src="frontend/"></script>-->
 <!-- Dupli load jquerya-->
 <!-- <script src="frontend/js/jquery.min.js"></script> -->
- <script src="frontend/js/utils.js"></script>
+ <script src="frontend/utils/utils.js"></script>
 <script>
     
     var app = $.spapp({
@@ -309,6 +309,7 @@
     });
     
     app.run();
+    
 </script>
 
 

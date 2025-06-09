@@ -2,6 +2,7 @@
 require_once 'BaseService.php';
 require_once __DIR__ . "/../dao/UsersDao.php";
 
+
 class UsersService extends BaseService
 {
     public function __construct()
@@ -18,7 +19,7 @@ class UsersService extends BaseService
     $email = trim($data['email'] ?? '');
     $password = $data['password'] ?? '';
     $repeatPassword = $data['repeat_password'] ?? '';
-
+    $user_data['role'] = Roles::USER;
     
     if (strlen($firstName) < 2) {
         Flight::halt(400, json_encode(["error" => "First name too short."]));
@@ -52,7 +53,8 @@ class UsersService extends BaseService
         "first_name" => $firstName,
         "last_name" => $lastName,
         "email" => $email,
-        "password" => $hashedPassword
+        "password" => $hashedPassword,
+          "role" => Roles::USER
     ];
 
     $this->dao->add($user);
